@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scrum Poker</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container py-4">
+    <!-- Vista de inicio -->
+    <div id="vista-inicio" class="vista">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card shadow">
+            <div class="card-header text-center bg-primary text-white">
+              <h1 class="h4 mb-0">Scrum Poker</h1>
+            </div>
+            <div class="card-body">
+              <p class="text-center text-muted mb-4">Estima tareas con tu equipo de forma sencilla y gratuita</p>
+              
+              <div class="d-grid gap-3">
+                <button id="btn-crear-sala" class="btn btn-primary">Crear nueva sala</button>
+                
+                <div class="text-center position-relative my-2">
+                  <hr>
+                  <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted small">o</span>
+                </div>
+                
+                <button id="btn-unirse-sala" class="btn btn-outline-secondary">Unirse a una sala</button>
+              </div>
+            </div>
+            <div class="card-footer text-center text-muted small">
+              Desarrollado para equipos ágiles que utilizan la metodología Scrum
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vista de crear sala -->
+    <div id="vista-crear-sala" class="vista d-none">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card shadow">
+            <div class="card-header">
+              <h1 class="h4 mb-0">Crear nueva sala</h1>
+            </div>
+            <div class="card-body">
+              <p class="text-muted mb-4">Configura una nueva sesión de Scrum Poker</p>
+              
+              <form id="crear-sala-form">
+                <div class="mb-3">
+                  <label for="nombre-sala" class="form-label">Nombre de la sala</label>
+                  <input type="text" class="form-control" id="nombre-sala" placeholder="Ej: Sprint 5 - Estimaciones" required>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="nombre-usuario-crear" class="form-label">Tu nombre</label>
+                  <input type="text" class="form-control" id="nombre-usuario-crear" placeholder="Ej: Juan Pérez" required>
+                </div>
+                
+                <div class="d-flex justify-content-between mt-4">
+                  <button type="button" class="btn btn-outline-secondary btn-volver">Cancelar</button>
+                  <button type="submit" class="btn btn-primary">Crear sala</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vista de unirse a sala -->
+    <div id="vista-unirse-sala" class="vista d-none">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card shadow">
+            <div class="card-header">
+              <h1 class="h4 mb-0">Unirse a una sala</h1>
+            </div>
+            <div class="card-body">
+              <p class="text-muted mb-4">Ingresa el código de la sala y tu nombre</p>
+              
+              <form id="unirse-sala-form">
+                <div class="mb-3">
+                  <label for="codigo-sala" class="form-label">Código de la sala</label>
+                  <input type="text" class="form-control" id="codigo-sala" placeholder="Ej: ABC123" required>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="nombre-usuario-unirse" class="form-label">Tu nombre</label>
+                  <input type="text" class="form-control" id="nombre-usuario-unirse" placeholder="Ej: Juan Pérez" required>
+                </div>
+                
+                <div class="d-flex justify-content-between mt-4">
+                  <button type="button" class="btn btn-outline-secondary btn-volver">Cancelar</button>
+                  <button type="submit" class="btn btn-primary">Unirse</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vista de sala -->
+    <div id="vista-sala" class="vista d-none">
+      <div id="sala-container">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start mb-4">
+          <div>
+            <h1 id="nombre-sala-header" class="h3 mb-1"></h1>
+            <p class="text-muted">Código: <span id="codigo-sala-header"></span></p>
+          </div>
+          <div class="mt-2 mt-md-0">
+            <button id="btn-salir-sala" class="btn btn-outline-secondary btn-sm">Salir</button>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-md-8">
+            <!-- Tarea actual -->
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="row g-3">
+                  <div class="col">
+                    <label for="tarea" class="form-label">Tarea actual</label>
+                    <input type="text" class="form-control" id="tarea" placeholder="Describe la tarea a estimar">
+                  </div>
+                  <div class="col-auto d-flex align-items-end">
+                    <button id="actualizar-tarea" class="btn btn-primary">Actualizar</button>
+                  </div>
+                </div>
+                
+                <div id="tarea-actual-container" class="mt-3 p-3 bg-light rounded d-none">
+                  <p class="fw-medium mb-1">Estimando:</p>
+                  <p id="tarea-actual-texto" class="mb-0"></p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cartas -->
+            <div class="mb-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 mb-0">Tus cartas</h2>
+                <div class="btn-group">
+                  <button id="toggle-votos" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-eye me-1"></i> Mostrar votos
+                  </button>
+                  <button id="reiniciar-votos" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-arrow-repeat me-1"></i> Reiniciar
+                  </button>
+                </div>
+              </div>
+              
+              <div id="cartas-container" class="row row-cols-3 row-cols-sm-5 g-2"></div>
+            </div>
+
+            <!-- Resultados -->
+            <div id="resultados-container" class="card mb-4 d-none">
+              <div class="card-body">
+                <h2 class="h5 mb-3">Resultados</h2>
+                <div class="row g-3">
+                  <div class="col-6">
+                    <div class="p-3 bg-light rounded text-center">
+                      <p class="small text-muted mb-1">Promedio</p>
+                      <p id="promedio" class="h3 mb-0">N/A</p>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="p-3 bg-light rounded text-center">
+                      <p class="small text-muted mb-1">Mediana</p>
+                      <p id="mediana" class="h3 mb-0">N/A</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <!-- Participantes -->
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                  <i class="bi bi-people"></i>
+                  <h2 class="h5 mb-0">Participantes</h2>
+                </div>
+                <div id="participantes-container" class="d-flex flex-column gap-2"></div>
+              </div>
+            </div>
+
+            <div id="todos-votaron" class="p-3 bg-success bg-opacity-10 rounded text-center d-none">
+              <p class="fw-medium mb-1">¡Todos han votado!</p>
+              <p class="small text-muted mb-0">Puedes mostrar los resultados</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast para notificaciones -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+      <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto" id="toast-title">Notificación</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="toast-body">
+          Mensaje de notificación
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
